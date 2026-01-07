@@ -4,13 +4,20 @@
     box-sizing: border-box;
 }
 
+html {
+    touch-action: pan-y;
+    -webkit-overflow-scrolling: touch;
+}
+
 body {
     background: #000000;
     color: #ffffff;
     font-family: 'Inter', sans-serif;
     overflow-x: hidden;
+    overflow-y: auto;
     position: relative;
     min-height: 100vh;
+    touch-action: pan-y;
 }
 
 .mouse-gradient {
@@ -61,6 +68,7 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 200vh;
+    touch-action: pan-y;
 }
 
 .initial-view {
@@ -75,6 +83,7 @@ body {
     z-index: 2;
     background: transparent;
     pointer-events: none;
+    touch-action: none;
 }
 
 .initial-view .error-code {
@@ -192,6 +201,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    touch-action: pan-y;
 }
 
 .scroll-error-code {
