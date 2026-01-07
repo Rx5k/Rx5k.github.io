@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>410 Gone - #Struggle</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="mouse-gradient"></div>
+    <div class="click-ripples"></div>
+
+    <div class="initial-view">
+        <div class="error-code">
+            <h1 class="error-number">410</h1>
+            <h2 class="status">GONE</h2>
+        </div>
+        <div class="scroll-hint">
+            <div class="scroll-hint-arrow"></div>
+            <p class="scroll-hint-text">Scroll</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="scroll-content">
+        <div class="error-code scroll-error-code">
+            <h1 class="error-number">410</h1>
+            <h2 class="status">GONE</h2>
+        </div>
+
+        <div class="message-container">
+            <p class="message fade-in delay-1">
+                <span class="red-text">You tapped out.</span>
+            </p>
+            <p class="message fade-in delay-2">
+                The resource you were looking for is <span class="red-text">gone</span>.
+            </p>
+            <p class="message fade-in delay-3">
+                Just like the opportunities you're letting slip away.
+            </p>
+        </div>
+
+        <div class="divider fade-in delay-4"></div>
+
+        <div class="inspiration-container">
+            <blockquote class="quote fade-in delay-5">
+                "It always seems impossible until it's done."
+                <span class="author">— Nelson Mandela</span>
+            </blockquote>
+
+            <div class="reflection fade-in delay-6">
+                <p>But here's the truth:</p>
+                <p class="emphasis">Nothing is truly gone as long as you keep trying.</p>
+            </div>
+
+
+            <div class="question fade-in delay-8">
+                <p class="big-text">What makes you different?</p>
+                <p class="red-text bold">Will you stay down?</p>
+                <p>Or will you get back up?</p>
+            </div>
+        </div>
+
+        <div class="action-area fade-in delay-9">
+            <p class="choice-text">The choice is yours:</p>
+            <div class="buttons">
+                <button class="btn btn-back" onclick="goBack()">
+                    <span class="btn-text">Go Back & Fight</span>
+                    <span class="btn-subtext">Your time is still ticking</span>
+                </button>
+                <button class="btn btn-stay" onclick="stayHere()">
+                    <span class="btn-text red-text">Stay Down</span>
+                    <span class="btn-subtext">Accept defeat</span>
+                </button>
+            </div>
+        </div>
+
+        <footer class="footer fade-in delay-10">
+            <p class="footer-text">#Struggle</p>
+            <p class="footer-subtext">Life won't wait.</p>
+            <p class="copyright">© 2026 らすく</p>
+        </footer>
+        </div>
+    </div>
+
+    <canvas id="particles"></canvas>
+
+    <script src="script.js"></script>
+</body>
+</html>
