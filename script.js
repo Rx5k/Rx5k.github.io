@@ -131,16 +131,15 @@ class ParticleSystem {
 
     setupTouchTracking() {
         document.addEventListener('touchmove', (e) => {
-            e.preventDefault();
             const touch = e.touches[0];
             this.mouseX = touch.clientX;
             this.mouseY = touch.clientY;
             this.mouseActive = true;
-        });
+        }, { passive: true });
 
         document.addEventListener('touchend', () => {
             this.mouseActive = false;
-        });
+        }, { passive: true });
     }
 
     resize() {
@@ -256,10 +255,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.addEventListener('touchmove', (e) => {
-        e.preventDefault();
         const touch = e.touches[0];
         updateGradient(touch.clientX, touch.clientY);
-    }, { passive: false });
+    }, { passive: true });
 
     const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     const createClickEffect = (x, y, isTouch = false) => {
