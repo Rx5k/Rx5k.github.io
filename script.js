@@ -30,7 +30,7 @@ class Particle {
             const maxDistance = 200;
 
             if (distance < maxDistance && distance > 0) {
-                const baseForce = isTouchDevice ? 0.006 : 0.005;
+                const baseForce = isTouchDevice ? 0.012 : 0.005;
                 const normalizedDx = dx / distance;
                 const normalizedDy = dy / distance;
                 const force = (maxDistance - distance) / maxDistance * baseForce;
@@ -92,6 +92,9 @@ class ParticleSystem {
         this.mouseActive = false;
         this.time = 0;
         this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        this.isScrolling = false;
+        this.lastScrollY = 0;
+        this.scrollTimeout = null;
         this.updateParticleCount();
 
         this.resize();
@@ -99,12 +102,37 @@ class ParticleSystem {
         this.animate();
         this.setupMouseTracking();
         this.setupTouchTracking();
+        this.setupScrollDetection();
 
         window.addEventListener('resize', () => {
             this.resize();
             this.updateParticleCount();
             this.init();
         });
+    }
+
+    setupScrollDetection() {
+        let lastScrollTime = 0;
+        window.addEventListener('scroll', () => {
+            const now = Date.now();
+            const scrollY = window.scrollY;
+            const scrollDelta = Math.abs(scrollY - this.lastScrollY);
+            
+            if (scrollDelta > 5) {
+                this.isScrolling = true;
+                this.mouseActive = false;
+                lastScrollTime = now;
+            }
+            
+            this.lastScrollY = scrollY;
+            
+            clearTimeout(this.scrollTimeout);
+            this.scrollTimeout = setTimeout(() => {
+                if (now - lastScrollTime > 150) {
+                    this.isScrolling = false;
+                }
+            }, 150);
+        }, { passive: true });
     }
 
     updateParticleCount() {
@@ -131,20 +159,45 @@ class ParticleSystem {
 
     setupTouchTracking() {
         let lastTouchUpdate = 0;
+        let lastTouchX = 0;
+        let lastTouchY = 0;
+        
         document.addEventListener('touchmove', (e) => {
+            if (this.isScrolling) {
+                this.mouseActive = false;
+                return;
+            }
+            
             const now = Date.now();
-            if (now - lastTouchUpdate < 16) return;
-            lastTouchUpdate = now;
+            if (now - lastTouchUpdate < 50) return;
+            
             const touch = e.touches[0];
             if (touch) {
-                this.mouseX = touch.clientX;
-                this.mouseY = touch.clientY;
-                this.mouseActive = true;
+                const touchX = touch.clientX;
+                const touchY = touch.clientY;
+                const moveDistance = Math.sqrt(
+                    Math.pow(touchX - lastTouchX, 2) + 
+                    Math.pow(touchY - lastTouchY, 2)
+                );
+                
+                if (moveDistance < 100) {
+                    this.mouseX = touchX;
+                    this.mouseY = touchY;
+                    this.mouseActive = true;
+                    lastTouchX = touchX;
+                    lastTouchY = touchY;
+                } else {
+                    this.mouseActive = false;
+                }
+                
+                lastTouchUpdate = now;
             }
         }, { passive: true });
 
         document.addEventListener('touchend', () => {
             this.mouseActive = false;
+            lastTouchX = 0;
+            lastTouchY = 0;
         }, { passive: true });
     }
 
@@ -168,8 +221,9 @@ class ParticleSystem {
         };
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+        const effectiveMouseActive = this.mouseActive && !this.isScrolling;
         this.particles.forEach(particle => {
-            particle.update(this.mouseX, this.mouseY, this.mouseActive, this.time, baseMovement, this.isTouchDevice);
+            particle.update(this.mouseX, this.mouseY, effectiveMouseActive, this.time, baseMovement, this.isTouchDevice);
             particle.draw();
         });
 
